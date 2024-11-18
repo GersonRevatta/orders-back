@@ -1,66 +1,56 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Proyecto API de Ordenes
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descripción
 
-## About Laravel
+Este proyecto es una API RESTful que gestiona órdenes, productos (ítems) y usuarios. Está construido en Laravel y utiliza Docker para la configuración del entorno. La API ofrece diversos endpoints para interactuar con los datos de órdenes y productos.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requisitos
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Docker
+- PHP 8.2
+- Composer
+- Laravel Framework 11.31.0
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalación y Ejecución
 
-## Learning Laravel
+# Guía para Levantar un Proyecto Docker en Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Esta guía te llevará a través del proceso para levantar un proyecto Laravel utilizando Docker, ejecutar los seeds y realizar pruebas con PHPUnit.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Paso 1: Hacer el Build del Contenedor Docker
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Primero, asegúrate de tener Docker instalado en tu máquina. Si ya lo tienes, navega hasta la raíz de tu proyecto Laravel donde está el archivo `docker-compose.yml`.
 
-## Laravel Sponsors
+##### Ejecuta el siguiente comando para construir las imágenes de Docker:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
 
-### Premium Partners
+docker-compose build
+docker compose up 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Luego crear la db, las migraciones  en el container por bash y correr los seeds 
+#### Nota: Para ejecutar esto necesitas entrar en el container
+```bash
 
-## Code of Conduct
+php artisan migrate:refresh --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+##### Ejecutar los specs , tambien puedes visualizarlos , se probo el controller y los modelos 
+```bash
 
-## Security Vulnerabilities
+./vendor/bin/phpunit tests
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+### Abordar situaciones de gran volumen de datos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Es importante tener en cuenta que este sistema puede enfrentar situaciones de gran volumen de escrituras y lecturas simultáneas. Para abordar estos requisitos, se han implementado varias estrategias:
+
+    Uso de Cache: Las consultas frecuentes se cachean para evitar consultas innecesarias a la base de datos. Esto mejora el rendimiento del sistema y reduce la carga en el servidor de base de datos.
+
+    Encolamiento de Solicitudes (en desarrollo): Aunque no se implementó por falta de tiempo y porque la fecha limite del reto me gano, el encolamiento de solicitudes es una estrategia que permitiría procesar las operaciones de manera asíncrona. Esto ayudaría a soportar una carga más alta, evitando bloqueos y mejorando la escalabilidad. El encolamiento de solicitudes permite que los trabajos se procesen en segundo plano, mejorando el rendimiento general.
+
+
